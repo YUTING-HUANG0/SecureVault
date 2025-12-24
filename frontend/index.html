@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gacha Hell - 系統入侵</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cursor-glow"></div> 
+    <div class="forced-bg"></div>
+<section id="auth-modal" class="login-container hidden">
+        <div class="cyber-frame login-box">
+            <button onclick="closeLoginModal()" class="btn-close-modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="auth-panel left-panel">
+                <div class="panel-content">
+                    <h1 class="glitch-text" data-text="SYSTEM" style="font-size: 2.8rem !important; margin-bottom: 0;">SYSTEM</h1>
+                    <p style="color: var(--primary); letter-spacing: 3px; font-weight: bold; margin-bottom: 2rem; opacity: 0.8;">
+                        身分驗證
+                    </p>
+
+                    <div class="input-group-lg">
+                        <label>USERNAME</label>
+                        <input type="text" id="login-user" placeholder="ENTER ID">
+                    </div>
+                    <div class="input-group-lg">
+                        <label>PASSWORD</label>
+                        <input type="password" id="login-pass" placeholder="ENTER PASSWORD">
+                    </div>
+
+                    <button class="btn-mega" onclick="handleLogin()" style="margin-top: 1rem;">
+                        <i class="fa-solid fa-fingerprint"></i> 登入
+                    </button>
+
+                    <div class="security-control-wrapper" style="margin-top: 2rem; transform: scale(0.9); margin-bottom: 0;">
+                        <div class="security-panel">
+                            <span class="mode-label danger">HACK</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="login-security-toggle" onchange="syncSecurityMode(this)">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="mode-label safe">SECURE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="otp-panel" class="auth-panel right-panel">
+                <div class="panel-content">
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    
+                    <h2 class="otp-title">2FA VERIFY</h2>
+                    
+                    <p class="otp-desc">
+                        Waiting for Authorization...<br>
+                        請先通過左側驗證
+                    </p>
+
+                    <div class="input-group-lg otp-group">
+                        <input type="text" id="otp-input" placeholder="--- ---" maxlength="6" disabled>
+                    </div>
+
+                    <button id="btn-otp-verify" class="btn-mega btn-otp" onclick="verifyOTP()" disabled>
+                        確認發送驗證碼
+                    </button>
+                    
+                    <div style="margin-top: 1.5rem; color: #555; font-family: monospace;">
+                        SECURE CODE: <span style="color: #fff; font-weight: bold;">123456</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+    <section id="otp-section" class="login-container hidden">
+        <div class="cyber-frame login-box" style="max-width: 400px; border-color: var(--primary);">
+            <h2 class="glitch-text" style="font-size: 2rem; color: var(--primary);">2FA VERIFY</h2>
+            <div style="margin: 1.5rem 0;">
+                <i class="fa-solid fa-mobile-screen-button" style="font-size: 4rem; color: var(--primary); animation: pulse 2s infinite;"></i>
+            </div>
+            <p style="color: #ccc; margin-bottom: 1.5rem;">
+                檢測到 <span style="color:var(--primary)">防禦模式</span><br>
+                請輸入 Google Authenticator 6位數驗證碼
+            </p>
+            <div class="input-group-lg">
+                <input type="text" id="otp-input" placeholder="000 000" maxlength="6" 
+                       style="text-align: center; letter-spacing: 5px; font-size: 1.8rem; font-weight: bold; color: var(--primary); border-color: var(--primary);">
+            </div>
+            <button class="btn-mega" onclick="verifyOTP()" style="background: var(--primary); color: #000;">
+                <i class="fa-solid fa-shield-check"></i> 確認驗證
+            </button>
+            <div style="margin-top: 1rem; font-size: 0.8rem; color: #666;">
+                ( 測試用固定驗證碼：<span style="color: #fff;">123456</span> )
+            </div>
+        </div>
+    </section>
+
+    <div id="game-app">
+        <nav>
+            <div class="nav-brand">
+                <i class="fa-solid fa-ghost"></i> GACHA_HELL
+            </div>
+            <div class="nav-center">
+                <button onclick="showPage('altar')" class="nav-btn active">
+                    <i class="fa-solid fa-gem"></i> 祭壇
+                </button>
+                <button onclick="showPage('store')" class="nav-btn">
+                    <i class="fa-solid fa-cart-shopping"></i> 儲值
+                </button>
+                <button onclick="showPage('inventory')" class="nav-btn">
+                    <i class="fa-solid fa-box-open"></i> 背包
+                </button>
+            </div>
+            <div class="user-info">
+                <span class="diamond-icon">💎</span> 
+                <span id="diamond-display">0</span>
+                
+                <button id="btn-nav-login" onclick="openLoginModal()" style="background:none; border:none; color:var(--primary); margin-left:15px; cursor:pointer; font-size: 1.1rem; font-family: 'Orbitron';">
+                    <i class="fa-solid fa-user-astronaut"></i> LOGIN
+                </button>
+                <button id="btn-nav-logout" onclick="logout()" style="display:none; background:none; border:none; color:var(--danger); margin-left:15px; cursor:pointer; font-size: 1.1rem;">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main>
+            <div id="landing-page" style="text-align: center; padding-top: 20vh; height: 100vh; display: block;">
+                <h1 class="glitch-text" style="font-size: 4rem; text-shadow: 0 0 20px var(--primary);">SYSTEM LOCKED</h1>
+                <div style="font-size: 5rem; color: #333; margin: 2rem 0;">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <p style="font-size: 1.5rem; color: var(--secondary); letter-spacing: 2px;">ACCESS RESTRICTED</p>
+                <p style="color: #888; margin-top: 1rem;">請點擊右上方 LOGIN 進行身分驗證</p>
+            </div>
+
+            <div id="game-content" style="display: none;">
+                
+                <div class="security-control-wrapper">
+                    <div class="security-panel">
+                        <span class="mode-label danger">
+                            <i class="fa-solid fa-skull-crossbones"></i> 駭客模式
+                        </span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="securityToggle" onchange="syncSecurityMode(this)">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="mode-label safe">
+                            <i class="fa-solid fa-shield-halved"></i> 防禦模式
+                        </span>
+                    </div>
+                </div>
+
+                <section id="altar" class="page-section active">
+                    <div class="cyber-frame">
+                        <div class="corner top-left"></div>
+                        <div class="corner top-right"></div>
+                        <div class="corner bottom-left"></div>
+                        <div class="corner bottom-right"></div>
+                        <div class="frame-content">
+                            <div class="gacha-visual-area">
+                                <div id="gacha-box" class="gacha-card-placeholder">
+                                    <div class="question-mark">?</div>
+                                </div>
+                                <div id="gacha-status" class="gacha-status-text">點擊召喚</div>
+                            </div>
+                            <button id="btn-gacha" class="btn-mega" onclick="performGacha()">
+                                單抽 (100 💎)
+                            </button>
+                            <div class="hack-hint">
+                                <i class="fa-solid fa-terminal"></i> 漏洞提示：連點測試 Race Condition
+                            </div>
+                        </div>
+                    </div>
+                </section>
+<section id="store" class="page-section">
+    <div class="cyber-frame">
+        <div class="corner top-left"></div><div class="corner top-right"></div>
+        <div class="corner bottom-left"></div><div class="corner bottom-right"></div>
+
+        <div class="frame-content">
+            <h2 class="section-title">黑市交易終端</h2>
+            
+            <div class="store-grid">
+                <div class="store-card" onclick="quickPurchase(100)">
+                    <div class="store-icon"><i class="fa-regular fa-gem"></i></div>
+                    <div class="store-name">碎鑽袋</div>
+                    <div class="store-price">Credit: 100</div>
+                    <div class="store-desc">獲得 100 鑽石</div>
+                </div>
+                <div class="store-card recommended" onclick="quickPurchase(1000)">
+                    <div class="badge">HOT</div>
+                    <div class="store-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div class="store-name">高階補給箱</div>
+                    <div class="store-price">Credit: 1,000</div>
+                    <div class="store-desc">獲得 1,000 鑽石</div>
+                </div>
+                <div class="store-card" onclick="quickPurchase(5000)">
+                    <div class="store-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <div class="store-name">走私者皮箱</div>
+                    <div class="store-price">Credit: 5,000</div>
+                    <div class="store-desc">獲得 5,000 鑽石</div>
+                </div>
+            </div>
+
+            <div class="custom-pay-area">
+                <div class="divider"><span>OR CUSTOM AMOUNT</span></div>
+                <div class="input-group-lg">
+                    <input type="number" id="store-amount" placeholder="自訂注入金額 (試試負數漏洞)">
+                </div>
+                <button class="btn-mega btn-green" onclick="performPurchase()">
+                    <i class="fa-solid fa-bolt"></i> 執行自訂注入
+                </button>
+                <div class="hack-hint">
+                    <i class="fa-solid fa-terminal"></i> 漏洞提示：後端未檢查負數，嘗試輸入負值來 "退款加鑽"
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+                <section id="inventory" class="page-section">
+                    <div class="cyber-frame" style="margin-bottom: 2rem;">
+                        <div class="corner top-left"></div>
+                        <div class="corner top-right"></div>
+                        <div class="frame-content">
+                            <h2 class="section-title">玩家數據庫 (XSS)</h2>
+                            <div class="input-group-lg">
+                                <input type="text" id="signature-input" placeholder="輸入個性簽名 (試試 <img src=x onerror=alert(1)>)">
+                                <button class="btn-mega btn-blue" onclick="updateProfile()" style="margin-top: 1rem;">更新資料</button>
+                            </div>
+                            <div id="signature-display" class="signature-display-box">
+                                <span style="color: #555;">// 等待數據注入...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cyber-frame">
+                        <div class="corner bottom-left"></div>
+                        <div class="corner bottom-right"></div>
+                        <div class="frame-content">
+    <h2 class="section-title">資產管理 (IDOR)</h2>
+    
+    <div class="hack-hint" style="margin-top: 0; margin-bottom: 1.5rem; border-top: none; border-bottom: 1px solid #333; padding-bottom: 10px;">
+        <i class="fa-solid fa-terminal"></i> 目標：刪除管理員的 SSR 卡片 (ID: 999)
+    </div>
+
+    <div class="hack-tool-row">
+        <input type="number" id="delete-target-id" value="999" placeholder="Target ID">
+        <button class="btn-mega btn-red" onclick="deleteCard()">DELETE (刪除)</button>
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterInventory('ALL')">ALL</button>
+        <button class="filter-btn" onclick="filterInventory('SSR')">SSR</button>
+        <button class="filter-btn" onclick="filterInventory('SR')">SR</button>
+        <button class="filter-btn" onclick="filterInventory('R')">R/N</button>
+    </div>
+
+    <div id="inventory-grid" class="inventory-grid"></div>
+</div>
+                    </div>
+                </section>
+                
+            </div> </main>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
