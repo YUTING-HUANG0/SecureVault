@@ -16,6 +16,7 @@
 2. 執行：`docker-compose up --build`。
 3. 前端首頁：`http://localhost:3000`。
 4. 後端 API：`http://localhost:5000`。
+
 **B. 本地開發啟動**
 1.進入後端目錄:`cd backend`。
 2.安裝必要套件:`pip install flask-cors`。
