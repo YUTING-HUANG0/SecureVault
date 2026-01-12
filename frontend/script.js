@@ -1,7 +1,7 @@
 // ==============================
 // 0. 核心變數 & 資料
 // ==============================
-const API_URL = "http://localhost:5000/api"; 
+const API_URL = "http://localhost:5000/api";
 
 let diamonds = 0;
 let isSecureMode = false;
