@@ -18,9 +18,9 @@
 4. 後端 API：`http://localhost:5000`。
 
 **B. 本地開發啟動**
-1.進入後端目錄:`cd backend`。
-2.安裝必要套件:`pip install flask-cors`。
-3.啟動後端連線:`python run.py`。
+1. 進入後端目錄:`cd backend`。
+2. 安裝必要套件:`pip install flask-cors`。
+3. 啟動後端連線:`python run.py`。
 ## 資安防禦亮點
 - **CI/CD**: 集成 GitHub Actions (CodeQL) 進行自動化原始碼掃描。
 - **後端**: 實作密碼雜湊、參數化查詢、並發控制。
